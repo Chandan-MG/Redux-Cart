@@ -1,27 +1,13 @@
-import {createSlice, configureStore } from '@reduxjs/toolkit';
-
-const initialCartState = {
-    isMyCart : false
-}
-
-const cartSlice = createSlice({
-    name: 'cart',
-    initialState: initialCartState,
-    reducers: {
-        toggleCart(state){
-            state.isMyCart = !state.isMyCart;
-        }
-    }
-})
-
+import {configureStore } from '@reduxjs/toolkit';
+import uiSlice from './ui-slice';
+import cartSlice from './cart.slice';
 
 const store = configureStore({
     reducer:{
+        ui: uiSlice.reducer,
         cart: cartSlice.reducer
     }
 })
 
-
-export const cartActions = cartSlice.actions;
 
 export default store;

@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 
 function App() {
 
-  const isMyCart = useSelector(state => state.cart.isMyCart);
+  const isMyCart = useSelector(state => state.ui.cartIsVisible);
   return (
     <Layout>
       {isMyCart && (<Cart />)}

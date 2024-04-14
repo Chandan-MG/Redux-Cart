@@ -6,6 +6,7 @@ import Products from './components/Shop/Products';
 import {useSelector, useDispatch} from 'react-redux';
 import { uiActions } from './Store/ui-slice';
 import Notification from './components/UI/Notifications';
+import { fetchCartData } from './Store/cart-actions';
 
 let initial =true;
 
@@ -16,19 +17,25 @@ function App() {
   const cart = useSelector((state)=> state.cart);
 
   useEffect(()=>{
-    const sendCartData = async ()=>{
-      dispatch(uiActions.showNotification({
-        status: "loading",
-        message:"Sending your data...",
-        title: 'Please Wait..'
-      }));
-      const response = await fetch('https://expense-tracker-dfeec-default-rtdb.firebaseio.com/cart.json', {
-        method: 'PUT',
-        body: JSON.stringify(cart)
-      });
+    dispatch(fetchCartData()); 
+  },[dispatch])
 
-      if(!response.ok){
-        throw new Error('Sending cart data failed');
+  useEffect(()=>{
+    const sendCartData = async ()=>{
+      if(cart.changed){
+        dispatch(uiActions.showNotification({
+          status: "loading",
+          message:"Sending your data...",
+          title: 'Please Wait..'
+        }));
+        const response = await fetch('https://expense-tracker-dfeec-default-rtdb.firebaseio.com/cart.json', {
+          method: 'PUT',
+          body: JSON.stringify(cart)
+        });
+
+        if(!response.ok){
+          throw new Error('Sending cart data failed');
+        }
       }
       
       dispatch(uiActions.showNotification({
